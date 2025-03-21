@@ -12,7 +12,14 @@ function App() {
 
   const handleRegister = async () => {
     try {
-      await createUserWithEmailAndPassword(auth, email, password);
+      const userCredential = await createUserWithEmailAndPassword(auth, email, password);
+  
+      // Atualizar o perfil do usuário com o nome
+      await updateProfile(userCredential.user, { displayName: name });
+  
+      // Buscar os dados mais recentes do usuário
+      setUser(auth.currentUser);
+  
       alert("Usuário cadastrado com sucesso!");
     } catch (error) {
       alert(error.message);
@@ -21,7 +28,11 @@ function App() {
 
   const handleLogin = async () => {
     try {
-      await signInWithEmailAndPassword(auth, email, password);
+      const userCredential = await signInWithEmailAndPassword(auth, email, password);
+      
+      // Buscar os dados mais recentes do usuário
+      setUser(userCredential.user);
+      
       alert("Login realizado com sucesso!");
     } catch (error) {
       alert(error.message);
